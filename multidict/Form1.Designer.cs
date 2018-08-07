@@ -1,4 +1,7 @@
-﻿namespace multidict
+﻿using System.Windows.Forms;
+using System;
+
+namespace multidict
 {
 	partial class Form1
 	{

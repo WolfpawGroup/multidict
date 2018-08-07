@@ -12,6 +12,11 @@ namespace multidict
 {
 	public partial class f_Reader : Form
 	{
+		c_DataSerializer ds = new c_DataSerializer();
+		List<c_DataObject> pastData = new List<c_DataObject>();
+
+		string clearTranslation = "";
+
 		public f_Reader()
 		{
 			InitializeComponent();
@@ -26,6 +31,8 @@ namespace multidict
 		public void setdata(string word, string translation, string from)
 		{
 			lbl_Word.Text = word;
+
+			clearTranslation = translation;
 
 			lbl_Translation.Navigate("about:blank");
 			HtmlDocument doc = lbl_Translation.Document;
@@ -46,6 +53,36 @@ namespace multidict
 			lbl_Dict.Text = from;
 
 			Text = word + " - " + from;
+		}
+
+		private void btn_Copy_Click(object sender, EventArgs e)
+		{
+			//object o = Clipboard.GetDataObject();
+
+			lbl_Translation.Document.ExecCommand("SelectAll", false, null);
+			lbl_Translation.Document.ExecCommand("Copy", false, null);
+
+			c_DataObject d1 = new c_DataObject()
+			{
+				word = lbl_Word.Text,
+				translation = clearTranslation.Replace("\r","").Replace("\n","\r\n"),
+				dictionary = lbl_Dict.Text
+			};
+
+			if (!cb_AppendData.Checked)
+			{
+				pastData.Clear();
+			}
+
+			d1.index = pastData.Count + 1;
+
+			pastData.Add(d1);
+
+			lbl_Translation.Document.ExecCommand("Unselect", false, Type.Missing);
+
+			//Clipboard.SetDataObject(o, true, 10, 100);
+			
+			Clipboard.SetText(ds.getJSON(pastData));
 		}
 	}
 }

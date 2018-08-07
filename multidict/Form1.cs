@@ -19,6 +19,7 @@ namespace multidict
 
 		private void btn_Search_Click(object sender, EventArgs e)
 		{
+			
 			List<string> dicts = new List<string>() {"*", "fd-eng-hun"};
 			List<string> words = new List<string>() { "apple"};
 
@@ -46,6 +47,7 @@ namespace multidict
 				}
 
 			}
+			
 		}
 
 		private void lv_Results_MouseDoubleClick(object sender, MouseEventArgs e)
