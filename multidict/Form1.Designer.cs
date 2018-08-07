@@ -108,12 +108,15 @@
             this.ch_Result_id,
             this.ch_Result_From,
             this.ch_Result_Data});
+			this.lv_Results.FullRowSelect = true;
+			this.lv_Results.GridLines = true;
 			this.lv_Results.Location = new System.Drawing.Point(15, 172);
 			this.lv_Results.Name = "lv_Results";
 			this.lv_Results.Size = new System.Drawing.Size(773, 266);
 			this.lv_Results.TabIndex = 5;
 			this.lv_Results.UseCompatibleStateImageBehavior = false;
 			this.lv_Results.View = System.Windows.Forms.View.Details;
+			this.lv_Results.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lv_Results_MouseDoubleClick);
 			// 
 			// ch_Result_id
 			// 
