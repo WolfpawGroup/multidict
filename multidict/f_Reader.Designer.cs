@@ -30,7 +30,7 @@
 		{
 			this.lbl_Word = new System.Windows.Forms.Label();
 			this.lbl_Dict = new System.Windows.Forms.Label();
-			this.lbl_Translation = new System.Windows.Forms.Label();
+			this.lbl_Translation = new System.Windows.Forms.WebBrowser();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
@@ -58,16 +58,20 @@
 			// 
 			// lbl_Translation
 			// 
-			this.lbl_Translation.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			//this.lbl_Translation.AcceptsTab = true;
+			this.lbl_Translation.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			| System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.lbl_Translation.BackColor = System.Drawing.Color.White;
-			this.lbl_Translation.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			//this.lbl_Translation.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.lbl_Translation.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
 			this.lbl_Translation.Location = new System.Drawing.Point(83, 112);
 			this.lbl_Translation.Name = "lbl_Translation";
-			this.lbl_Translation.Size = new System.Drawing.Size(542, 434);
+			//this.lbl_Translation.ReadOnly = true;
+			this.lbl_Translation.Size = new System.Drawing.Size(750, 434);
 			this.lbl_Translation.TabIndex = 2;
+			this.lbl_Translation.DocumentText = "<html></html>";
+			this.lbl_Translation.ScriptErrorsSuppressed = true;
 			// 
 			// label1
 			// 
@@ -99,7 +103,7 @@
 			// button1
 			// 
 			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button1.Location = new System.Drawing.Point(550, 559);
+			this.button1.Location = new System.Drawing.Point(758, 559);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(75, 23);
 			this.button1.TabIndex = 6;
@@ -120,7 +124,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(637, 594);
+			this.ClientSize = new System.Drawing.Size(845, 594);
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.button1);
 			this.Controls.Add(this.label3);
@@ -140,7 +144,7 @@
 
 		private System.Windows.Forms.Label lbl_Word;
 		private System.Windows.Forms.Label lbl_Dict;
-		private System.Windows.Forms.Label lbl_Translation;
+		private System.Windows.Forms.WebBrowser lbl_Translation;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label3;

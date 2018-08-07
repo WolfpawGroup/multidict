@@ -19,8 +19,8 @@ namespace multidict
 
 		private void btn_Search_Click(object sender, EventArgs e)
 		{
-			List<string> dicts = new List<string>() { "*", "fd-eng-hun", "moby-thesaurus", "fd-eng-nld", "fd-eng-deu" };
-			List<string> words = new List<string>() { "apple", "beer"};
+			List<string> dicts = new List<string>() {"*", "fd-eng-hun"};
+			List<string> words = new List<string>() { "apple"};
 
 			c_Api ap = new c_Api();
 			
@@ -42,7 +42,6 @@ namespace multidict
 						lvi.SubItems.Add(rret[1]);
 						lvi.Tag = new string[] { word, rret[0], rret[1] };
 						lv_Results.Items.Add(lvi);
-
 					}
 				}
 
