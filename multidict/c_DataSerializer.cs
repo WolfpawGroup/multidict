@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Newtonsoft;
 using Newtonsoft.Json;
-
-
+using System.Xml;
+using System.Xml.Serialization;
+using YamlDotNet.Core;
+using YamlDotNet.Serialization;
 
 namespace multidict
 {
@@ -52,7 +53,66 @@ namespace multidict
 			return r;
 		}
 
+		public string getXML(List<c_DataObject> strs)
+		{
 
+			string r = "<translations>";
+
+			using (MemoryStream s = new MemoryStream())
+			{
+				using (var tr = new StreamWriter(s, Encoding.UTF8))
+				{
+					XmlSerializer xs = new XmlSerializer(new c_DataObject().GetType());
+					foreach (c_DataObject str in strs)
+					{
+						xs.Serialize(tr, str);
+
+						tr.Flush();
+						s.Position = 0;
+
+						using (var sr = new StreamReader(s, Encoding.UTF8, true))
+						{
+							string xTmp = sr.ReadToEnd();
+							XmlDocument xd = new XmlDocument();
+							xd.LoadXml(xTmp);
+							xd.DocumentElement.SetAttribute("index", str.index.ToString());
+							r += sr.ReadToEnd();
+						}
+					}
+				}
+			}
+
+			r += "</translations>";
+
+			return r;
+		}
+
+		public string getYAML(List<c_DataObject> strs)
+		{
+			string r = "";
+
+			using (MemoryStream s = new MemoryStream())
+			{
+				using (var tr = new StreamWriter(s, Encoding.UTF8))
+				{
+					Serializer xs = new Serializer();
+					foreach (c_DataObject str in strs)
+					{
+						xs.Serialize(tr, str, new c_DataObject().GetType());
+						
+						tr.Flush();
+						s.Position = 0;
+
+						using (var sr = new StreamReader(s, Encoding.UTF8, true))
+						{
+							r += sr.ReadToEnd();
+						}
+					}
+				}
+			}
+			
+			return r;
+		}
 
 
 

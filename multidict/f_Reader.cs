@@ -79,10 +79,8 @@ namespace multidict
 			pastData.Add(d1);
 
 			lbl_Translation.Document.ExecCommand("Unselect", false, Type.Missing);
-
-			//Clipboard.SetDataObject(o, true, 10, 100);
 			
-			Clipboard.SetText(ds.getJSON(pastData));
+			Clipboard.SetText(ds.getYAML(pastData));
 		}
 	}
 }
