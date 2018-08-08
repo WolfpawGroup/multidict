@@ -80,7 +80,7 @@ namespace multidict
 
 			lbl_Translation.Document.ExecCommand("Unselect", false, Type.Missing);
 			
-			Clipboard.SetText(ds.getYAML(pastData));
+			Clipboard.SetText(ds.getXML(pastData));
 		}
 	}
 }

@@ -10,6 +10,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
+using System.Xml.Linq;
 
 namespace multidict
 {
@@ -55,36 +56,60 @@ namespace multidict
 
 		public string getXML(List<c_DataObject> strs)
 		{
+			XmlDocument xd = new XmlDocument();
 
-			string r = "<translations>";
+			XmlNode xml_xml = xd.CreateNode(XmlNodeType.XmlDeclaration, "xml", "/");
+			XmlNode trans_xml = xd.CreateElement("translations");
+			
+			xd.AppendChild(xml_xml);
+			xd.AppendChild(trans_xml);
 
-			using (MemoryStream s = new MemoryStream())
+			foreach (c_DataObject str in strs)
 			{
-				using (var tr = new StreamWriter(s, Encoding.UTF8))
+				XmlSerializer xs = new XmlSerializer(new c_DataObject().GetType());
+				using (StringWriter swr = new StringWriter())
 				{
-					XmlSerializer xs = new XmlSerializer(new c_DataObject().GetType());
-					foreach (c_DataObject str in strs)
-					{
-						xs.Serialize(tr, str);
+					xs.Serialize(swr, str);
 
-						tr.Flush();
-						s.Position = 0;
+					swr.Flush();
 
-						using (var sr = new StreamReader(s, Encoding.UTF8, true))
-						{
-							string xTmp = sr.ReadToEnd();
-							XmlDocument xd = new XmlDocument();
-							xd.LoadXml(xTmp);
-							xd.DocumentElement.SetAttribute("index", str.index.ToString());
-							r += sr.ReadToEnd();
-						}
-					}
+					string tmp = swr.ToString();
+
+					XmlNode xm = xd.CreateElement("translation_" + str.index);
+					xm.InnerXml = new XmlDocument() { InnerXml = tmp }.ChildNodes[1].InnerXml;
+
+					xd.SelectSingleNode("translations").AppendChild(xm);
+					
 				}
 			}
+			
+			return PrettyXml(xd.OuterXml);
+		}
 
-			r += "</translations>";
+		static string PrettyXml(string xml)
+		{
+			try
+			{
+				var stringBuilder = new StringBuilder();
 
-			return r;
+				var element = XElement.Parse(xml);
+
+				var settings = new XmlWriterSettings();
+				settings.OmitXmlDeclaration = true;
+				settings.Indent = true;
+				settings.NewLineOnAttributes = true;
+
+				using (var xmlWriter = XmlWriter.Create(stringBuilder, settings))
+				{
+					element.Save(xmlWriter);
+				}
+
+				return stringBuilder.ToString();
+			}
+			catch
+			{
+				return xml;
+			}
 		}
 
 		public string getYAML(List<c_DataObject> strs)
@@ -95,16 +120,17 @@ namespace multidict
 			{
 				using (var tr = new StreamWriter(s, Encoding.UTF8))
 				{
-					Serializer xs = new Serializer();
-					foreach (c_DataObject str in strs)
+					using (var sr = new StreamReader(s, Encoding.UTF8, true))
 					{
-						xs.Serialize(tr, str, new c_DataObject().GetType());
-						
-						tr.Flush();
-						s.Position = 0;
-
-						using (var sr = new StreamReader(s, Encoding.UTF8, true))
+						Serializer xs = new Serializer();
+						foreach (c_DataObject str in strs)
 						{
+							xs.Serialize(tr, str, new c_DataObject().GetType());
+
+							tr.Flush();
+							s.Position = 0;
+
+
 							r += sr.ReadToEnd();
 						}
 					}
