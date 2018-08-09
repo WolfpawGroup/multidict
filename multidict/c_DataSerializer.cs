@@ -12,6 +12,12 @@ using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 using System.Xml.Linq;
 
+using MessagePack;
+using MessagePack.Formatters;
+using MessagePack.Internal;
+using MessagePack.LZ4;
+using MessagePack.Resolvers;
+
 namespace multidict
 {
 	public class c_DataSerializer
@@ -77,7 +83,14 @@ namespace multidict
 
 					XmlNode xm = xd.CreateElement("translation_" + str.index);
 					xm.InnerXml = new XmlDocument() { InnerXml = tmp }.ChildNodes[1].InnerXml;
-
+					if (Properties.Settings.Default.s_XML_UseCData)
+					{
+						string tmpText = xm.SelectSingleNode("/translation").InnerText;
+						xm.SelectSingleNode("/translation").InnerText = "";
+						XmlNode xText = xd.CreateNode(XmlNodeType.CDATA, "", "");
+						xText.InnerText = tmpText;
+						xm.SelectSingleNode("/translation").AppendChild(xText);
+					}
 					xd.SelectSingleNode("translations").AppendChild(xm);
 					
 				}
@@ -95,7 +108,12 @@ namespace multidict
 				var element = XElement.Parse(xml);
 
 				var settings = new XmlWriterSettings();
-				settings.OmitXmlDeclaration = true;
+
+				if (Properties.Settings.Default.s_XML_RemoveHeader)
+				{
+					settings.OmitXmlDeclaration = true;
+				}
+				
 				settings.Indent = true;
 				settings.NewLineOnAttributes = true;
 
@@ -140,7 +158,28 @@ namespace multidict
 			return r;
 		}
 
+		public string getMP(List<c_DataObject> strs)
+		{
+			
+			foreach (var str in strs)
+			{
+				/*
+				var i = TypelessObjectResolver.Instance;
+				var formattter = i.GetFormatter<c_DataObject>();
+				byte[] bs = new byte[10240];
+				formattter.Serialize(ref bs, 0, str, TypelessObjectResolver.Instance);
+				//byte[] b = MessagePackSerializer.Serialize<c_DataObject>(str, TypelessObjectResolver.Instance);
+				foreach (byte bb in bs)
+				{
+					if(bb == '\0') { break; }
+					Console.Write(bb);
+				}
+				*/
+			}
 
+			return "a";
+
+		}
 
 	}
 }
