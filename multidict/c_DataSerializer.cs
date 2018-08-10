@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 using System.Xml;
 using System.Xml.Serialization;
-using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 using System.Xml.Linq;
-
 using MessagePack;
-using MessagePack.Formatters;
-using MessagePack.Internal;
-using MessagePack.LZ4;
-using MessagePack.Resolvers;
+using Google;
+using Google.Protobuf;
+using Google.Protobuf.Collections;
+using Google.Protobuf.Reflection;
+using Google.Protobuf.WellKnownTypes;
 
 namespace multidict
 {
@@ -66,7 +64,7 @@ namespace multidict
 
 			XmlNode xml_xml = xd.CreateNode(XmlNodeType.XmlDeclaration, "xml", "/");
 			XmlNode trans_xml = xd.CreateElement("translations");
-			
+
 			xd.AppendChild(xml_xml);
 			xd.AppendChild(trans_xml);
 
@@ -92,10 +90,10 @@ namespace multidict
 						xm.SelectSingleNode("/translation").AppendChild(xText);
 					}
 					xd.SelectSingleNode("translations").AppendChild(xm);
-					
+
 				}
 			}
-			
+
 			return PrettyXml(xd.OuterXml);
 		}
 
@@ -113,7 +111,7 @@ namespace multidict
 				{
 					settings.OmitXmlDeclaration = true;
 				}
-				
+
 				settings.Indent = true;
 				settings.NewLineOnAttributes = true;
 
@@ -154,31 +152,49 @@ namespace multidict
 					}
 				}
 			}
-			
+
 			return r;
 		}
 
+		/// <summary>
+		/// Returns MessagePack encoded into base64
+		/// </summary>
 		public string getMP(List<c_DataObject> strs)
 		{
-			
-			foreach (var str in strs)
+			List<byte> bb = new List<byte>();
+			StringBuilder ret = new StringBuilder();
+
+			byte[] b = new byte[] { 0 };
+
+			if (strs.Count > 1)
 			{
-				/*
-				var i = TypelessObjectResolver.Instance;
-				var formattter = i.GetFormatter<c_DataObject>();
-				byte[] bs = new byte[10240];
-				formattter.Serialize(ref bs, 0, str, TypelessObjectResolver.Instance);
-				//byte[] b = MessagePackSerializer.Serialize<c_DataObject>(str, TypelessObjectResolver.Instance);
-				foreach (byte bb in bs)
+				b = MessagePackSerializer.Serialize(strs);
+			}
+			else if (strs.Count == 1)
+			{
+				b = MessagePackSerializer.Serialize(strs[0]);
+			}
+
+			bb.AddRange(b);
+
+			ret.Append(Convert.ToBase64String((bb.ToArray())));
+
+			return ret.ToString();
+		}
+
+		/// <summary>
+		/// Returns ProtocolBuffer
+		/// </summary>
+		public string getPB(List<c_DataObject> strs)
+		{
+			using (MemoryStream ms = new MemoryStream()) {
+				using (CodedOutputStream cos = new CodedOutputStream(ms))
 				{
-					if(bb == '\0') { break; }
-					Console.Write(bb);
+					
 				}
-				*/
 			}
 
 			return "a";
-
 		}
 
 	}
