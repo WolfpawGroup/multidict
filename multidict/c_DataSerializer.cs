@@ -1,20 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Collections.Generic;
 
-using Newtonsoft.Json;
 using System.Xml;
+using System.Xml.Linq;
+using Newtonsoft.Json;
 using System.Xml.Serialization;
 using YamlDotNet.Serialization;
-using System.Xml.Linq;
 using MessagePack;
-using Google;
-using Google.Protobuf;
-using Google.Protobuf.Collections;
-using Google.Protobuf.Reflection;
-using Google.Protobuf.WellKnownTypes;
 
 namespace multidict
 {
@@ -181,21 +176,5 @@ namespace multidict
 
 			return ret.ToString();
 		}
-
-		/// <summary>
-		/// Returns ProtocolBuffer
-		/// </summary>
-		public string getPB(List<c_DataObject> strs)
-		{
-			using (MemoryStream ms = new MemoryStream()) {
-				using (CodedOutputStream cos = new CodedOutputStream(ms))
-				{
-					
-				}
-			}
-
-			return "a";
-		}
-
 	}
 }
