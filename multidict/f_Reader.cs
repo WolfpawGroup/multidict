@@ -15,6 +15,11 @@ namespace multidict
 		c_DataSerializer ds = new c_DataSerializer();
 		List<c_DataObject> pastData = new List<c_DataObject>();
 
+		private string _word = "";
+		private string _translation = "";
+		private string _from = "";
+
+
 		string clearTranslation = "";
 
 		public f_Reader()
@@ -30,6 +35,10 @@ namespace multidict
 
 		public void setdata(string word, string translation, string from)
 		{
+			_word = word;
+			_translation = translation;
+			_from = from;
+
 			lbl_Word.Text = word;
 
 			clearTranslation = translation;
@@ -57,10 +66,11 @@ namespace multidict
 
 		private void btn_Copy_Click(object sender, EventArgs e)
 		{
-			//object o = Clipboard.GetDataObject();
-
 			lbl_Translation.Document.ExecCommand("SelectAll", false, null);
 			lbl_Translation.Document.ExecCommand("Copy", false, null);
+
+			string tr = _translation;
+			tr = tr.ArrayReplace("<br />|<br>|<br/>","\r\n").ArrayReplace("<span class='tab'> </span>", "\t");
 
 			c_DataObject d1 = new c_DataObject()
 			{
@@ -79,8 +89,8 @@ namespace multidict
 			pastData.Add(d1);
 
 			lbl_Translation.Document.ExecCommand("Unselect", false, Type.Missing);
-			
-			Clipboard.SetText(ds.getMP(pastData));
+
+			Clipboard.SetText(ds.getJSON(pastData, true));
 		}
 	}
 }

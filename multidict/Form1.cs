@@ -16,7 +16,7 @@ namespace multidict
 		{
 			InitializeComponent();
 		}
-
+		
 		private void btn_Search_Click(object sender, EventArgs e)
 		{
 			
@@ -82,5 +82,75 @@ namespace multidict
 				frm.setdata(str[0], str[2], str[1]);
 			}
 		}
+	}
+
+	public static class string_extension
+	{
+		/// <summary>
+		/// Runs a replace on string with the values in replacenemnts
+		/// </summary>
+		public static string ArrayReplace(this string str, arrayReplacement[] replacements)
+		{
+			string s = str;
+
+			foreach (arrayReplacement ar in replacements)
+			{
+				s = s.Replace(ar.replace_this, ar.with_this);
+			}
+
+			return s;
+		}
+
+		/// <summary>
+		/// Replaces each string in inputArrayA with it's counterpart in inputArrayB
+		/// </summary>
+		public static string ArrayReplace(this string str, string[] inputArrayA, string[] inputArrayB)
+		{
+			if (inputArrayA.Length != inputArrayB.Length) { throw new ArgumentException("Exception!\r\nInput array lengths must match!", new Exception()); }
+			arrayReplacement[] ara = new arrayReplacement[inputArrayA.Length];
+
+			for (int i = 0; i < inputArrayA.Length; i++)
+			{
+				ara[i] = new arrayReplacement() { replace_this = inputArrayA[i], with_this = inputArrayB[i] };
+			}
+
+			return ArrayReplace(str, ara);
+		}
+
+		/// <summary>
+		/// Replaces all strings in inputArrayA with inputB
+		/// </summary>
+		public static string ArrayReplace(this string str, string[] inputArrayA, string inputB)
+		{
+			string s = str;
+
+			for (int i = 0; i < inputArrayA.Length; i++)
+			{
+				s = s.Replace(inputArrayA[i], inputB);
+			}
+
+			return s;
+		}
+
+		/// <summary>
+		/// Replaces all strings in inputA (split by |) with inputB
+		/// </summary>
+		public static string ArrayReplace(this string str, string inputA, string inputB)
+		{
+			string s = str;
+
+			foreach(string ss in inputA.Split('|'))
+			{
+				s = s.Replace(ss, inputB);
+			}
+
+			return s;
+		}
+	}
+
+	public struct arrayReplacement
+	{
+		public string replace_this { get; set; }
+		public string with_this { get; set; }
 	}
 }

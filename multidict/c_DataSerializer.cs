@@ -38,17 +38,39 @@ namespace multidict
 		}
 
 
-		public string getJSON(List<c_DataObject> strs)
+		public string getJSON(List<c_DataObject> strs, bool asArray)
 		{
-			string r = "{";
+			string r = "";
 
-			foreach (c_DataObject str in strs)
+			if (asArray)
 			{
-				r += string.Format(@" ""{0}"" : {1}", str.index, JsonConvert.SerializeObject(str));
-				if (!strs.Last().Equals(str)) { r += ", "; }
-			}
+				JsonSerializer jss = new JsonSerializer() { Formatting = Newtonsoft.Json.Formatting.Indented };
+				using (StringWriter sw = new StringWriter())
+				{
+					jss.Serialize(sw, strs);
+					r = (sw.ToString());
+				}
 
-			r += "}";
+			}
+			else
+			{
+
+				foreach (c_DataObject str in strs)
+				{
+					r += string.Format(@" ""{0}"" : {1}", str.index, JsonConvert.SerializeObject(str, Newtonsoft.Json.Formatting.Indented));
+					if (!strs.Last().Equals(str)) { r += ", "; }
+				}
+			}
+			
+			string t = r;
+			string[] st = t.Split('\n');
+			r = "";
+			for(int i = 0; i < t.Split('\n').Length; i++)
+			{
+				r += "\t" + st[i] + "\n";
+			}
+			
+			r = "{\r\n\"array\":" + r + "}";
 
 			return r;
 		}
@@ -154,7 +176,7 @@ namespace multidict
 		/// <summary>
 		/// Returns MessagePack encoded into base64
 		/// </summary>
-		public string getMP(List<c_DataObject> strs)
+		public string getMP(List<c_DataObject> strs, returnType rettype)
 		{
 			List<byte> bb = new List<byte>();
 			StringBuilder ret = new StringBuilder();
@@ -172,9 +194,41 @@ namespace multidict
 
 			bb.AddRange(b);
 
-			ret.Append(Convert.ToBase64String((bb.ToArray())));
+			switch (rettype) {
 
-			return ret.ToString();
+				case returnType.hexadecimal_string:
+						foreach (byte b_ in bb) { ret.Append(b_.ToString("X2") + " "); }
+					break;
+
+				case returnType.decimal_string:
+						foreach (byte b_ in bb) { ret.Append(((int)b_).ToString() + " "); }
+					break;
+
+				case returnType.octal_string:
+						foreach (byte b_ in bb) { ret.Append((Convert.ToString(b_, 8)).ToString() + " "); }
+					break;
+
+				case returnType.bytes:
+						foreach (byte b_ in bb) { ret.Append((char)b_); }
+					break;
+					
+				default:
+				case returnType.base64_string:
+						ret.Append(Convert.ToBase64String((bb.ToArray())));
+					break;
+			}
+
+			return ret.ToString().Trim();
 		}
+
+	}
+
+	public enum returnType
+	{
+		base64_string,
+		hexadecimal_string,
+		decimal_string,
+		octal_string,
+		bytes
 	}
 }

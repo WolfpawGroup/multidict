@@ -137,7 +137,8 @@
             "XML",
             "JSON",
             "YAML",
-            "AXON"});
+            "MessagePack (Base64)",
+            "MessagePack (HEX values)"});
 			this.cb_CopyAs.Location = new System.Drawing.Point(135, 561);
 			this.cb_CopyAs.Name = "cb_CopyAs";
 			this.cb_CopyAs.Size = new System.Drawing.Size(121, 21);
