@@ -66,17 +66,20 @@ namespace multidict
 
 		private void btn_Copy_Click(object sender, EventArgs e)
 		{
+			/*
 			lbl_Translation.Document.ExecCommand("SelectAll", false, null);
 			lbl_Translation.Document.ExecCommand("Copy", false, null);
-
+			*/
 			string tr = _translation;
-			tr = tr.ArrayReplace("<br />|<br>|<br/>","\r\n").ArrayReplace("<span class='tab'> </span>", "\t");
+			tr = tr.ArrayReplace("<br />|<br>|<br/>", "\r\n").ArrayReplace("<span class='tab'> </span>", "\t").RegReplace("<.*?</.*?>|<.*?>|</.*?>", "");
+			_translation = tr;
 
 			c_DataObject d1 = new c_DataObject()
 			{
-				word = lbl_Word.Text,
-				translation = clearTranslation.Replace("\r","").Replace("\n","\r\n"),
-				dictionary = lbl_Dict.Text
+				word = _word,
+				translation = _translation,
+				//translation = clearTranslation.Replace("\r","").Replace("\n","\r\n"),
+				dictionary = _from
 			};
 
 			if (!cb_AppendData.Checked)
@@ -88,9 +91,9 @@ namespace multidict
 
 			pastData.Add(d1);
 
-			lbl_Translation.Document.ExecCommand("Unselect", false, Type.Missing);
+			//lbl_Translation.Document.ExecCommand("Unselect", false, Type.Missing);
 
-			Clipboard.SetText(ds.getJSON(pastData, true));
+			Clipboard.SetText(ds.getJSON(pastData, false));
 		}
 	}
 }

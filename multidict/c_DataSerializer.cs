@@ -32,7 +32,7 @@ namespace multidict
 			string r = "";
 			foreach (c_DataObject str in strs)
 			{
-				r += string.Format("{0};{1};{2};{3}", str.index, str.word, str.translation, str.dictionary);
+				r += string.Format("{0};{1};{2};{3}\r\n", str.index, str.word, str.translation, str.dictionary);
 			}
 			return r;
 		}
@@ -48,7 +48,7 @@ namespace multidict
 				using (StringWriter sw = new StringWriter())
 				{
 					jss.Serialize(sw, strs);
-					r = (sw.ToString());
+					r = "\"array:\"" + (sw.ToString());
 				}
 
 			}
@@ -70,7 +70,7 @@ namespace multidict
 				r += "\t" + st[i] + "\n";
 			}
 			
-			r = "{\r\n\"array\":" + r + "}";
+			r = "{\r\n" + r + "}";
 
 			return r;
 		}

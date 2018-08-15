@@ -123,18 +123,19 @@ namespace multidict
 			html = html.Replace("<pre>", "<val><![CDATA[");
 			html = html.Replace("</pre>", "]]></val>");
 			Regex r0 = new Regex("From <a href.*?>(.*?)</a>", RegexOptions.IgnoreCase);
-			Regex r = new Regex("<a href.*?</a>", RegexOptions.IgnoreCase);
+			Regex r = new Regex("<a href.*?>(.*?)</a>", RegexOptions.IgnoreCase);
+			//Regex r = new Regex("<a href.*?</a>", RegexOptions.IgnoreCase);
 
 			while (r0.IsMatch(html))
 			{
 				html = html.Replace(r0.Match(html).Value, "<from>" + r0.Match(html).Groups[r0.Match(html).Groups.Count - 1].Value + "</from>");
 			}
-
+			
 			while (r.IsMatch(html))
 			{
-				html = html.Replace(r.Match(html).Value, "");
+				html = html.Replace(r.Match(html).Value, r.Match(html).Groups[r.Match(html).Groups.Count - 1].Value);
 			}
-
+			
 			xd.LoadXml(html);
 
 			List<XmlNode[]> lst = new List<XmlNode[]>();

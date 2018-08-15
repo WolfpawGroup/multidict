@@ -135,7 +135,8 @@
             "clear text ( \\r\\n )",
             "CSW ( ; )",
             "XML",
-            "JSON",
+            "JSON (List)",
+            "JSON (Array)",
             "YAML",
             "MessagePack (Base64)",
             "MessagePack (HEX values)"});

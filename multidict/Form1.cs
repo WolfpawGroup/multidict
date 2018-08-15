@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -139,12 +140,33 @@ namespace multidict
 		{
 			string s = str;
 
-			foreach(string ss in inputA.Split('|'))
+			foreach (string ss in inputA.Split('|'))
 			{
 				s = s.Replace(ss, inputB);
 			}
 
 			return s;
+		}
+
+		/// <summary>
+		/// Regex Replace where inputA is the regex searched for
+		/// </summary>
+		public static string RegReplace(this string str, string inputA, string inputB, bool ignoreCase = false, bool multiLine = false, bool singleLine = false, bool ecmaScript = false)
+		{
+			RegexOptions ro = new RegexOptions();
+			if (multiLine) { ro |= RegexOptions.Multiline; }
+			if (ignoreCase) { ro |= RegexOptions.IgnoreCase; }
+			if (singleLine) { ro |= RegexOptions.Singleline; }
+			if (ecmaScript) { ro |= RegexOptions.ECMAScript; }
+
+			Regex r = new Regex(inputA, ro);
+
+			if (r.IsMatch(str))
+			{
+				str = r.Replace(str, inputB);
+			}
+
+			return str;
 		}
 	}
 
