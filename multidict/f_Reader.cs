@@ -31,6 +31,8 @@ namespace multidict
 		private void F_Reader_Load(object sender, EventArgs e)
 		{
 			setdata("", "", "");
+			cb_CopyAs.SelectedIndex = Properties.Settings.Default.s_LastCopyMode;
+			cb_AppendData.Checked = Properties.Settings.Default.s_CopyAppend;
 		}
 
 		public void setdata(string word, string translation, string from)
@@ -93,7 +95,61 @@ namespace multidict
 
 			//lbl_Translation.Document.ExecCommand("Unselect", false, Type.Missing);
 
-			Clipboard.SetText(ds.getJSON(pastData, false));
+			switch (cb_CopyAs.SelectedIndex)
+			{
+				case 0:
+					Clipboard.SetText(ds.getText(pastData));
+					break;
+
+				case 1:
+					Clipboard.SetText(ds.getCSV(pastData));
+					break;
+
+				case 2:
+					Clipboard.SetText(ds.getHTML(pastData));
+					break;
+
+				case 3:
+					Clipboard.SetText(ds.getXML(pastData));
+					break;
+
+				case 4:
+					Clipboard.SetText(ds.getJSON(pastData, false));
+					break;
+
+				case 5:
+					Clipboard.SetText(ds.getJSON(pastData, true));
+					break;
+
+				case 6:
+					Clipboard.SetText(ds.getYAML(pastData));
+					break;
+
+				case 7:
+					Clipboard.SetText(ds.getMP(pastData, returnType.base64_string));
+					break;
+
+				case 8:
+					Clipboard.SetText(ds.getMP(pastData, returnType.hexadecimal_string));
+					break;
+			}
+		}
+
+		private void cb_AppendData_CheckedChanged(object sender, EventArgs e)
+		{
+			Properties.Settings.Default.s_CopyAppend = cb_AppendData.Checked;
+			Properties.Settings.Default.Save();
+		}
+
+		private void cb_CopyAs_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			Properties.Settings.Default.s_LastCopyMode = cb_CopyAs.SelectedIndex;
+			Properties.Settings.Default.Save();
+		}
+
+		private void btn_Close_Click(object sender, EventArgs e)
+		{
+			this.Close();
 		}
 	}
 }

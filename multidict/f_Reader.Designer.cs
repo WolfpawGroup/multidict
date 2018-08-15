@@ -106,6 +106,7 @@
 			this.btn_Close.TabIndex = 6;
 			this.btn_Close.Text = "Close Window";
 			this.btn_Close.UseVisualStyleBackColor = true;
+			this.btn_Close.Click += new System.EventHandler(this.btn_Close_Click);
 			// 
 			// btn_Copy
 			// 
@@ -120,6 +121,7 @@
 			// 
 			// label4
 			// 
+			this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label4.AutoSize = true;
 			this.label4.Location = new System.Drawing.Point(111, 564);
 			this.label4.Name = "label4";
@@ -129,11 +131,13 @@
 			// 
 			// cb_CopyAs
 			// 
+			this.cb_CopyAs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.cb_CopyAs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cb_CopyAs.FormattingEnabled = true;
 			this.cb_CopyAs.Items.AddRange(new object[] {
             "clear text ( \\r\\n )",
             "CSW ( ; )",
+            "HTML",
             "XML",
             "JSON (List)",
             "JSON (Array)",
@@ -142,18 +146,20 @@
             "MessagePack (HEX values)"});
 			this.cb_CopyAs.Location = new System.Drawing.Point(135, 561);
 			this.cb_CopyAs.Name = "cb_CopyAs";
-			this.cb_CopyAs.Size = new System.Drawing.Size(121, 21);
+			this.cb_CopyAs.Size = new System.Drawing.Size(163, 21);
 			this.cb_CopyAs.TabIndex = 9;
+			this.cb_CopyAs.SelectedIndexChanged += new System.EventHandler(this.cb_CopyAs_SelectedIndexChanged);
 			// 
 			// cb_AppendData
 			// 
-			this.cb_AppendData.AutoSize = true;
-			this.cb_AppendData.Location = new System.Drawing.Point(262, 564);
+			this.cb_AppendData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.cb_AppendData.Location = new System.Drawing.Point(304, 559);
 			this.cb_AppendData.Name = "cb_AppendData";
-			this.cb_AppendData.Size = new System.Drawing.Size(63, 17);
+			this.cb_AppendData.Size = new System.Drawing.Size(107, 29);
 			this.cb_AppendData.TabIndex = 10;
 			this.cb_AppendData.Text = "Append";
 			this.cb_AppendData.UseVisualStyleBackColor = true;
+			this.cb_AppendData.CheckedChanged += new System.EventHandler(this.cb_AppendData_CheckedChanged);
 			// 
 			// f_Reader
 			// 

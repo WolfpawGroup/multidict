@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Xml.Serialization;
 using YamlDotNet.Serialization;
 using MessagePack;
+using System.Windows.Forms;
 
 namespace multidict
 {
@@ -194,31 +195,108 @@ namespace multidict
 
 			bb.AddRange(b);
 
-			switch (rettype) {
+			switch (rettype)
+			{
 
 				case returnType.hexadecimal_string:
-						foreach (byte b_ in bb) { ret.Append(b_.ToString("X2") + " "); }
+					foreach (byte b_ in bb) { ret.Append(b_.ToString("X2") + " "); }
 					break;
 
 				case returnType.decimal_string:
-						foreach (byte b_ in bb) { ret.Append(((int)b_).ToString() + " "); }
+					foreach (byte b_ in bb) { ret.Append(((int)b_).ToString() + " "); }
 					break;
 
 				case returnType.octal_string:
-						foreach (byte b_ in bb) { ret.Append((Convert.ToString(b_, 8)).ToString() + " "); }
+					foreach (byte b_ in bb) { ret.Append((Convert.ToString(b_, 8)).ToString() + " "); }
 					break;
 
 				case returnType.bytes:
-						foreach (byte b_ in bb) { ret.Append((char)b_); }
+					foreach (byte b_ in bb) { ret.Append((char)b_); }
 					break;
-					
+
 				default:
 				case returnType.base64_string:
-						ret.Append(Convert.ToBase64String((bb.ToArray())));
+					ret.Append(Convert.ToBase64String((bb.ToArray())));
 					break;
 			}
 
 			return ret.ToString().Trim();
+		}
+
+		public string getHTML(List<c_DataObject> strs)
+		{
+			StringBuilder sb = new StringBuilder();
+			string strLinks = "";
+			string linkTemplate = "<a href='#translation_{0}'> ○ Translation{0} </a><br />";
+
+			sb.AppendLine("<!DOCTYPE html>");
+			sb.AppendLine("<html>");
+			sb.AppendLine("	<head>");
+			sb.AppendLine("		<meta charset='UTF-8' />");
+			sb.AppendLine("		<title>");
+			sb.AppendLine("			Copied from WolfPaw multiDict - " + DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString());
+			sb.AppendLine("		</title>");
+			sb.AppendLine("		<style>");
+			sb.AppendLine("			body{ background:lightblue; padding: 30px; }");
+			sb.AppendLine("			h1{ text-shadow:2px 2px 2px #333; font-size:3.3em; margin-bottom:60px;  }");
+			sb.AppendLine("			h2{ font-weight:100; font-size: 0.9em; font-family:consolas; color: red; text-shadow:1px 1px 1px #F00;  }");
+			sb.AppendLine("			p{ display:block; width:99%; position:relative; white-space:pre-wrap; font-size:1.2em; font-family:\"Courier New\"; text-shadow:1px 1px 2px #111;  }");
+			sb.AppendLine("			div{ margin-top:20px; padding: 5px 0px 20px 10px; border-bottom: 1px solid white;  border-left: 10px solid rgba(255,255,255,0.3); border-top-left-radius:10px; border-bottom-left-radius:15px; }");
+			sb.AppendLine("			#indexHolder { background:#FFF; display:inline; position:absolute; padding-left: 25px; margin-left:-5px; margin-top:-30px; z-index:1; border-top-left-radius:5px;}");
+			sb.AppendLine("			#pages{ display:block; width: auto; padding-right:20px; height:19px;  line-break: unset; transition-duration:1s; overflow:hidden;  }");
+			sb.AppendLine("			#chk { display:inline; position:absolute; margin-left: -20px; }");
+			sb.AppendLine("			#chk:checked + #pages{ transition-property:height; height: calc(28px + ([MAX]*20px)); transition-duration:1s; overflow:hidden; overflow-y:auto;}");
+			sb.AppendLine("			#pages a{ font-weight:bold; font-family:Consolas; text-decoration:none; color:black; }");
+			sb.AppendLine("			#pages a:hover{ font-weight:bold; font-family:Consolas; text-decoration:none; color:red; }");
+			sb.AppendLine("			#s::before{ content:\"  Translations: \"; cursor:pointer; }");
+			sb.AppendLine("		</style>");
+			sb.AppendLine("	</head>");
+			sb.AppendLine("	<body>");
+			sb.AppendLine("		<h1>" + strs[0].word + "</h1>");
+
+			
+
+			if (strs.Count == 1)
+			{
+				sb.AppendLine("		<div id='translation_0'>");
+
+				sb.AppendLine("			<h2 id='dict_0'>" + strs[0].dictionary + "</h2>");
+				sb.AppendLine("			<p id='trans_0'>" + strs[0].translation + "</p>");
+
+
+				sb.AppendLine("		</div>");
+			}
+			else
+			{
+				sb.AppendLine("		<span id='indexHolder' >");
+				sb.AppendLine("			<input type='checkbox' id='chk' />");
+				sb.AppendLine("			<span id='pages' onclick='document.getElementById(\"chk\").checked = !document.getElementById(\"chk\").checked;'>");
+				sb.AppendLine("				<span id='s'></span><br /><br />");
+				sb.AppendLine("				[TRANSLATIONS]");
+				sb.AppendLine("			</span>");
+				sb.AppendLine("		</span>");
+
+				
+
+				foreach (c_DataObject str in strs)
+				{
+					sb.AppendLine("		<div id='translation_" + str.index + "'>");
+
+					sb.AppendLine("			<h2 title='Translation " + str.index + "' id='dict_" + str.index + "'>" + str.dictionary + "</h2>");
+					sb.AppendLine("			<p title='Translation " + str.index + "' id='trans_" + str.index + "'>" + str.translation + "</p>");
+					
+					sb.AppendLine("		</div>");
+
+					strLinks += string.Format(linkTemplate, str.index) + "\r\n";
+				}
+			}
+
+
+
+			sb.AppendLine("	</body>");
+			sb.AppendLine("</html>");
+
+			return sb.ToString().Replace("[MAX]", strs.Count + "").Replace("[TRANSLATIONS]", strLinks);
 		}
 
 	}
