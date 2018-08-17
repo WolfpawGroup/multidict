@@ -30,55 +30,80 @@ namespace multidict
 				foreach(ListViewItem l in lvia) { try { lvis.Add(l.SubItems[0].Text, l.SubItems[2].Text); } catch { } }
 				lv_Dictionaries.Items.AddRange(lvia);
 			}
+
+			loadLastSearches();
+		}
+
+		public void loadLastSearches()
+		{
+			cb_Search.Items.Clear();
+			string[] lsts = new string[Properties.Settings.Default.s_LastSearches.Count];
+			Properties.Settings.Default.s_LastSearches.CopyTo(lsts, 0);
+			lsts = lsts.Reverse().ToArray();
+			cb_Search.Items.AddRange(lsts);
 		}
 
 		private void btn_Search_Click(object sender, EventArgs e)
 		{
-			if ((lv_Dictionaries.CheckedItems.Count > 0 || lv_Dictionaries.FocusedItem != null) && cb_Search.Text != "")
+			if (cb_Search.Text != "")
 			{
-				if (cb_Clear.Checked) { lv_Results.Items.Clear(); }
+				string[] lsts = new string[Properties.Settings.Default.s_LastSearches.Count];
+				Properties.Settings.Default.s_LastSearches.CopyTo(lsts, 0);
 
-				List<string> dicts = new List<string>();
-				List<string> words = new List<string>();
-
-				ListViewItem[] lvis = new ListViewItem[lv_Dictionaries.CheckedItems.Count];
-				lv_Dictionaries.CheckedItems.CopyTo(lvis, 0);
-				List<ListViewItem> checkedItems = lvis.ToList();
-
-				if (lv_Dictionaries.CheckedItems.Count > 0)
+				if (lsts.Select(x => x.ToLower()).Contains(cb_Search.Text.ToLower()))
 				{
-					foreach (string s in checkedItems.Select(x=>x.Tag))
-					{
-						dicts.Add(s);
-					}
+					Properties.Settings.Default.s_LastSearches.RemoveAt(lsts.Select(x => x.ToLower()).ToList().IndexOf(cb_Search.Text.ToLower()));
 				}
-				else
-				{
-					dicts.Add(lv_Dictionaries.FocusedItem.Tag.ToString());
-				}
+				Properties.Settings.Default.s_LastSearches.Add(cb_Search.Text);
+				Properties.Settings.Default.Save();
+				loadLastSearches();
 
-				words = cb_Search.Text.Split(' ').ToList();
-				
-				foreach (String word in words)
+				if (lv_Dictionaries.CheckedItems.Count > 0 || lv_Dictionaries.FocusedItem != null)
 				{
-					ListViewItem lvi0 = new ListViewItem(new string[] { "", word, "" });
-					lvi0.BackColor = Color.LightSkyBlue;
-					lvi0.Tag = new string[] { word, "NO DATA", "NO DATA" };
-					lv_Results.Items.Add(lvi0);
-					foreach (List<string[]> ret in api.getTranslations(dicts, word))
+					if (cb_Clear.Checked) { lv_Results.Items.Clear(); }
+
+					List<string> dicts = new List<string>();
+					List<string> words = new List<string>();
+
+					ListViewItem[] lvis = new ListViewItem[lv_Dictionaries.CheckedItems.Count];
+					lv_Dictionaries.CheckedItems.CopyTo(lvis, 0);
+					List<ListViewItem> checkedItems = lvis.ToList();
+
+					if (lv_Dictionaries.CheckedItems.Count > 0)
 					{
-						foreach (string[] rret in ret)
+						foreach (string s in checkedItems.Select(x => x.Tag))
 						{
-							ListViewItem lvi = new ListViewItem();
-							lvi.BackColor = lv_Results.Items.Count % 2 == 0 ? Color.LightYellow : Color.WhiteSmoke;
-							lvi.Text = ((lv_Results.Items.Count + 1) + "");
-							lvi.SubItems.Add(rret[0]);
-							lvi.SubItems.Add(rret[1]);
-							lvi.Tag = new string[] { word, rret[0], rret[1] };
-							lv_Results.Items.Add(lvi);
+							dicts.Add(s);
 						}
 					}
+					else
+					{
+						dicts.Add(lv_Dictionaries.FocusedItem.Tag.ToString());
+					}
 
+					words = cb_Search.Text.Split(' ').ToList();
+
+					foreach (String word in words)
+					{
+						ListViewItem lvi0 = new ListViewItem(new string[] { "", word, "" });
+						lvi0.BackColor = Color.LightSkyBlue;
+						lvi0.Tag = new string[] { word, "NO DATA", "NO DATA" };
+						lv_Results.Items.Add(lvi0);
+						foreach (List<string[]> ret in api.getTranslations(dicts, word))
+						{
+							foreach (string[] rret in ret)
+							{
+								ListViewItem lvi = new ListViewItem();
+								lvi.BackColor = lv_Results.Items.Count % 2 == 0 ? Color.LightYellow : Color.WhiteSmoke;
+								lvi.Text = ((lv_Results.Items.Count + 1) + "");
+								lvi.SubItems.Add(rret[0]);
+								lvi.SubItems.Add(rret[1]);
+								lvi.Tag = new string[] { word, rret[0], rret[1] };
+								lv_Results.Items.Add(lvi);
+							}
+						}
+
+					}
 				}
 			}
 		}
@@ -160,12 +185,33 @@ namespace multidict
 
 		private void btn_Dicts_CheckFromEnglish_Click(object sender, EventArgs e)
 		{
-
+			foreach (ListViewItem item in lv_Dictionaries.Items)
+			{
+				if (lvis.Where(x => x.Key == item.SubItems[0].Text).Select(x => x.Value == "E").Count(x => x.Equals(true)) > 0)
+				{
+					item.Checked = !item.Checked;
+				}
+			}
 		}
 
 		private void btn_Dicts_CheckToEnglish_Click(object sender, EventArgs e)
 		{
+			foreach (ListViewItem item in lv_Dictionaries.Items)
+			{
+				if (lvis.Where(x => x.Key == item.SubItems[0].Text).Select(x => x.Value == "O").Count(x => x.Equals(true)) > 0)
+				{
+					item.Checked = !item.Checked;
+				}
+			}
+		}
 
+		private void cb_Search_KeyDown(object sender, KeyEventArgs e)
+		{
+			if(e.KeyCode == Keys.Enter)
+			{
+				btn_Search_Click(null, null);
+				e.SuppressKeyPress = true;
+			}
 		}
 	}
 

@@ -38,6 +38,18 @@ namespace multidict
 			this.lv_Dictionaries = new System.Windows.Forms.ListView();
 			this.ch_Index = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.ch_DictionaryName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.cms_Dicts = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.btn_Dicts_CheckAll = new System.Windows.Forms.ToolStripMenuItem();
+			this.btn_Dicts_UncheckAll = new System.Windows.Forms.ToolStripMenuItem();
+			this.btn_Dicts_Sep1 = new System.Windows.Forms.ToolStripSeparator();
+			this.btn_Dicts_Groups = new System.Windows.Forms.ToolStripMenuItem();
+			this.btn_Dicts_CheckDefaultGroup = new System.Windows.Forms.ToolStripMenuItem();
+			this.btn_Dicts_Sep2 = new System.Windows.Forms.ToolStripSeparator();
+			this.btn_Dicts_CheckUtil = new System.Windows.Forms.ToolStripMenuItem();
+			this.btn_Dicts_CheckFromEnglish = new System.Windows.Forms.ToolStripMenuItem();
+			this.btn_Dicts_CheckToEnglish = new System.Windows.Forms.ToolStripMenuItem();
+			this.btn_Dicts_Sep3 = new System.Windows.Forms.ToolStripSeparator();
+			this.btn_Dicts_CheckInvert = new System.Windows.Forms.ToolStripMenuItem();
 			this.btn_Search = new System.Windows.Forms.Button();
 			this.lv_Results = new System.Windows.Forms.ListView();
 			this.ch_Result_id = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -45,18 +57,8 @@ namespace multidict
 			this.ch_Result_Data = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.btn_Exit = new System.Windows.Forms.Button();
 			this.cb_Clear = new System.Windows.Forms.CheckBox();
-			this.cms_Dicts = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.btn_Dicts_UncheckAll = new System.Windows.Forms.ToolStripMenuItem();
-			this.btn_Dicts_CheckAll = new System.Windows.Forms.ToolStripMenuItem();
-			this.btn_Dicts_Sep1 = new System.Windows.Forms.ToolStripSeparator();
-			this.btn_Dicts_Groups = new System.Windows.Forms.ToolStripMenuItem();
-			this.btn_Dicts_CheckDefaultGroup = new System.Windows.Forms.ToolStripMenuItem();
-			this.btn_Dicts_Sep2 = new System.Windows.Forms.ToolStripSeparator();
-			this.btn_Dicts_CheckFromEnglish = new System.Windows.Forms.ToolStripMenuItem();
-			this.btn_Dicts_CheckToEnglish = new System.Windows.Forms.ToolStripMenuItem();
-			this.btn_Dicts_Sep3 = new System.Windows.Forms.ToolStripSeparator();
-			this.btn_Dicts_CheckInvert = new System.Windows.Forms.ToolStripMenuItem();
-			this.btn_Dicts_CheckUtil = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+			this.cms_SearchHistory = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.cms_Dicts.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -76,6 +78,9 @@ namespace multidict
 			this.cb_Search.Name = "cb_Search";
 			this.cb_Search.Size = new System.Drawing.Size(360, 21);
 			this.cb_Search.TabIndex = 1;
+			this.toolTip1.SetToolTip(this.cb_Search, "Search for word, multiple words should be separated with spaces (e.g.: apple oran" +
+        "ge)");
+			this.cb_Search.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cb_Search_KeyDown);
 			// 
 			// label2
 			// 
@@ -114,6 +119,92 @@ namespace multidict
 			// 
 			this.ch_DictionaryName.Text = "Dictionary";
 			this.ch_DictionaryName.Width = 311;
+			// 
+			// cms_Dicts
+			// 
+			this.cms_Dicts.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btn_Dicts_CheckAll,
+            this.btn_Dicts_UncheckAll,
+            this.btn_Dicts_Sep1,
+            this.btn_Dicts_Groups,
+            this.btn_Dicts_CheckDefaultGroup,
+            this.btn_Dicts_Sep2,
+            this.btn_Dicts_CheckUtil,
+            this.btn_Dicts_CheckFromEnglish,
+            this.btn_Dicts_CheckToEnglish,
+            this.btn_Dicts_Sep3,
+            this.btn_Dicts_CheckInvert});
+			this.cms_Dicts.Name = "cms_Dicts";
+			this.cms_Dicts.Size = new System.Drawing.Size(207, 198);
+			// 
+			// btn_Dicts_CheckAll
+			// 
+			this.btn_Dicts_CheckAll.Name = "btn_Dicts_CheckAll";
+			this.btn_Dicts_CheckAll.Size = new System.Drawing.Size(206, 22);
+			this.btn_Dicts_CheckAll.Text = "Check All";
+			this.btn_Dicts_CheckAll.Click += new System.EventHandler(this.btn_Dicts_CheckAll_Click);
+			// 
+			// btn_Dicts_UncheckAll
+			// 
+			this.btn_Dicts_UncheckAll.Name = "btn_Dicts_UncheckAll";
+			this.btn_Dicts_UncheckAll.Size = new System.Drawing.Size(206, 22);
+			this.btn_Dicts_UncheckAll.Text = "Uncheck All";
+			this.btn_Dicts_UncheckAll.Click += new System.EventHandler(this.btn_Dicts_UncheckAll_Click);
+			// 
+			// btn_Dicts_Sep1
+			// 
+			this.btn_Dicts_Sep1.Name = "btn_Dicts_Sep1";
+			this.btn_Dicts_Sep1.Size = new System.Drawing.Size(203, 6);
+			// 
+			// btn_Dicts_Groups
+			// 
+			this.btn_Dicts_Groups.Name = "btn_Dicts_Groups";
+			this.btn_Dicts_Groups.Size = new System.Drawing.Size(206, 22);
+			this.btn_Dicts_Groups.Text = "Groups";
+			// 
+			// btn_Dicts_CheckDefaultGroup
+			// 
+			this.btn_Dicts_CheckDefaultGroup.Name = "btn_Dicts_CheckDefaultGroup";
+			this.btn_Dicts_CheckDefaultGroup.Size = new System.Drawing.Size(206, 22);
+			this.btn_Dicts_CheckDefaultGroup.Text = "Check Default";
+			// 
+			// btn_Dicts_Sep2
+			// 
+			this.btn_Dicts_Sep2.Name = "btn_Dicts_Sep2";
+			this.btn_Dicts_Sep2.Size = new System.Drawing.Size(203, 6);
+			// 
+			// btn_Dicts_CheckUtil
+			// 
+			this.btn_Dicts_CheckUtil.Name = "btn_Dicts_CheckUtil";
+			this.btn_Dicts_CheckUtil.Size = new System.Drawing.Size(206, 22);
+			this.btn_Dicts_CheckUtil.Text = "Check Utility Dictionaries";
+			this.btn_Dicts_CheckUtil.Click += new System.EventHandler(this.btn_Dicts_CheckUtil_Click);
+			// 
+			// btn_Dicts_CheckFromEnglish
+			// 
+			this.btn_Dicts_CheckFromEnglish.Name = "btn_Dicts_CheckFromEnglish";
+			this.btn_Dicts_CheckFromEnglish.Size = new System.Drawing.Size(206, 22);
+			this.btn_Dicts_CheckFromEnglish.Text = "Check all \'From English\'";
+			this.btn_Dicts_CheckFromEnglish.Click += new System.EventHandler(this.btn_Dicts_CheckFromEnglish_Click);
+			// 
+			// btn_Dicts_CheckToEnglish
+			// 
+			this.btn_Dicts_CheckToEnglish.Name = "btn_Dicts_CheckToEnglish";
+			this.btn_Dicts_CheckToEnglish.Size = new System.Drawing.Size(206, 22);
+			this.btn_Dicts_CheckToEnglish.Text = "Check all \'To English\'";
+			this.btn_Dicts_CheckToEnglish.Click += new System.EventHandler(this.btn_Dicts_CheckToEnglish_Click);
+			// 
+			// btn_Dicts_Sep3
+			// 
+			this.btn_Dicts_Sep3.Name = "btn_Dicts_Sep3";
+			this.btn_Dicts_Sep3.Size = new System.Drawing.Size(203, 6);
+			// 
+			// btn_Dicts_CheckInvert
+			// 
+			this.btn_Dicts_CheckInvert.Name = "btn_Dicts_CheckInvert";
+			this.btn_Dicts_CheckInvert.Size = new System.Drawing.Size(206, 22);
+			this.btn_Dicts_CheckInvert.Text = "Invert Selection";
+			this.btn_Dicts_CheckInvert.Click += new System.EventHandler(this.btn_Dicts_CheckInvert_Click);
 			// 
 			// btn_Search
 			// 
@@ -183,91 +274,10 @@ namespace multidict
 			this.cb_Clear.Text = "Clear results before new search";
 			this.cb_Clear.UseVisualStyleBackColor = true;
 			// 
-			// cms_Dicts
+			// cms_SearchHistory
 			// 
-			this.cms_Dicts.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btn_Dicts_CheckAll,
-            this.btn_Dicts_UncheckAll,
-            this.btn_Dicts_Sep1,
-            this.btn_Dicts_Groups,
-            this.btn_Dicts_CheckDefaultGroup,
-            this.btn_Dicts_Sep2,
-            this.btn_Dicts_CheckUtil,
-            this.btn_Dicts_CheckFromEnglish,
-            this.btn_Dicts_CheckToEnglish,
-            this.btn_Dicts_Sep3,
-            this.btn_Dicts_CheckInvert});
-			this.cms_Dicts.Name = "cms_Dicts";
-			this.cms_Dicts.Size = new System.Drawing.Size(207, 220);
-			// 
-			// btn_Dicts_UncheckAll
-			// 
-			this.btn_Dicts_UncheckAll.Name = "btn_Dicts_UncheckAll";
-			this.btn_Dicts_UncheckAll.Size = new System.Drawing.Size(206, 22);
-			this.btn_Dicts_UncheckAll.Text = "Uncheck All";
-			this.btn_Dicts_UncheckAll.Click += new System.EventHandler(this.btn_Dicts_UncheckAll_Click);
-			// 
-			// btn_Dicts_CheckAll
-			// 
-			this.btn_Dicts_CheckAll.Name = "btn_Dicts_CheckAll";
-			this.btn_Dicts_CheckAll.Size = new System.Drawing.Size(206, 22);
-			this.btn_Dicts_CheckAll.Text = "Check All";
-			this.btn_Dicts_CheckAll.Click += new System.EventHandler(this.btn_Dicts_CheckAll_Click);
-			// 
-			// btn_Dicts_Sep1
-			// 
-			this.btn_Dicts_Sep1.Name = "btn_Dicts_Sep1";
-			this.btn_Dicts_Sep1.Size = new System.Drawing.Size(203, 6);
-			// 
-			// btn_Dicts_Groups
-			// 
-			this.btn_Dicts_Groups.Name = "btn_Dicts_Groups";
-			this.btn_Dicts_Groups.Size = new System.Drawing.Size(206, 22);
-			this.btn_Dicts_Groups.Text = "Groups";
-			// 
-			// btn_Dicts_CheckDefaultGroup
-			// 
-			this.btn_Dicts_CheckDefaultGroup.Name = "btn_Dicts_CheckDefaultGroup";
-			this.btn_Dicts_CheckDefaultGroup.Size = new System.Drawing.Size(206, 22);
-			this.btn_Dicts_CheckDefaultGroup.Text = "Check Default";
-			// 
-			// btn_Dicts_Sep2
-			// 
-			this.btn_Dicts_Sep2.Name = "btn_Dicts_Sep2";
-			this.btn_Dicts_Sep2.Size = new System.Drawing.Size(203, 6);
-			// 
-			// btn_Dicts_CheckFromEnglish
-			// 
-			this.btn_Dicts_CheckFromEnglish.Name = "btn_Dicts_CheckFromEnglish";
-			this.btn_Dicts_CheckFromEnglish.Size = new System.Drawing.Size(206, 22);
-			this.btn_Dicts_CheckFromEnglish.Text = "Check all \'From English\'";
-			this.btn_Dicts_CheckFromEnglish.Click += new System.EventHandler(this.btn_Dicts_CheckFromEnglish_Click);
-			// 
-			// btn_Dicts_CheckToEnglish
-			// 
-			this.btn_Dicts_CheckToEnglish.Name = "btn_Dicts_CheckToEnglish";
-			this.btn_Dicts_CheckToEnglish.Size = new System.Drawing.Size(206, 22);
-			this.btn_Dicts_CheckToEnglish.Text = "Check all \'To English\'";
-			this.btn_Dicts_CheckToEnglish.Click += new System.EventHandler(this.btn_Dicts_CheckToEnglish_Click);
-			// 
-			// btn_Dicts_Sep3
-			// 
-			this.btn_Dicts_Sep3.Name = "btn_Dicts_Sep3";
-			this.btn_Dicts_Sep3.Size = new System.Drawing.Size(203, 6);
-			// 
-			// btn_Dicts_CheckInvert
-			// 
-			this.btn_Dicts_CheckInvert.Name = "btn_Dicts_CheckInvert";
-			this.btn_Dicts_CheckInvert.Size = new System.Drawing.Size(206, 22);
-			this.btn_Dicts_CheckInvert.Text = "Invert Selection";
-			this.btn_Dicts_CheckInvert.Click += new System.EventHandler(this.btn_Dicts_CheckInvert_Click);
-			// 
-			// btn_Dicts_CheckUtil
-			// 
-			this.btn_Dicts_CheckUtil.Name = "btn_Dicts_CheckUtil";
-			this.btn_Dicts_CheckUtil.Size = new System.Drawing.Size(206, 22);
-			this.btn_Dicts_CheckUtil.Text = "Check Utility Dictionaries";
-			this.btn_Dicts_CheckUtil.Click += new System.EventHandler(this.btn_Dicts_CheckUtil_Click);
+			this.cms_SearchHistory.Name = "cms_Dicts";
+			this.cms_SearchHistory.Size = new System.Drawing.Size(61, 4);
 			// 
 			// Form1
 			// 
@@ -317,6 +327,8 @@ namespace multidict
 		private ToolStripSeparator btn_Dicts_Sep3;
 		private ToolStripMenuItem btn_Dicts_CheckInvert;
 		private ToolStripMenuItem btn_Dicts_CheckUtil;
+		private ToolTip toolTip1;
+		private ContextMenuStrip cms_SearchHistory;
 	}
 }
 

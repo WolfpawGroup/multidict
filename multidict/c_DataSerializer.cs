@@ -225,9 +225,10 @@ namespace multidict
 
 		public string getHTML(List<c_DataObject> strs)
 		{
+			string wrd = "";
 			StringBuilder sb = new StringBuilder();
 			string strLinks = "";
-			string linkTemplate = "<a href='#translation_{0}'> ○ Translation{0} </a><br />";
+			string linkTemplate = "<a href='#translation_{0}' onclick='event.stopPropagation();' > ○ Translation{0} </a><br />";
 
 			sb.AppendLine("<!DOCTYPE html>");
 			sb.AppendLine("<html>");
@@ -240,24 +241,25 @@ namespace multidict
 			sb.AppendLine("			body{ background:lightblue; padding: 30px; }");
 			sb.AppendLine("			h1{ text-shadow:2px 2px 2px #333; font-size:3.3em; margin-bottom:60px;  }");
 			sb.AppendLine("			h2{ font-weight:100; font-size: 0.9em; font-family:consolas; color: red; text-shadow:1px 1px 1px #F00;  }");
-			sb.AppendLine("			p{ display:block; width:99%; position:relative; white-space:pre-wrap; font-size:1.2em; font-family:\"Courier New\"; text-shadow:1px 1px 2px #111;  }");
+			sb.AppendLine("			p{ display:block; width:99%; position:relative; white-space:pre-wrap; font-size:1.2em; font-family:\"Courier New\"; text-shadow:1px 1px 1px #111;  }");
 			sb.AppendLine("			div{ margin-top:20px; padding: 5px 0px 20px 10px; border-bottom: 1px solid white;  border-left: 10px solid rgba(255,255,255,0.3); border-top-left-radius:10px; border-bottom-left-radius:15px; }");
-			sb.AppendLine("			#indexHolder { background:#FFF; display:inline; position:absolute; padding-left: 25px; margin-left:-5px; margin-top:-30px; z-index:1; border-top-left-radius:5px;}");
-			sb.AppendLine("			#pages{ display:block; width: auto; padding-right:20px; height:19px;  line-break: unset; transition-duration:1s; overflow:hidden;  }");
+			sb.AppendLine("			#indexHolder { background:#FFF; display:inline; position:absolute; padding-left: 25px; margin-left:-5px; margin-top:-30px; z-index:1; border-top-left-radius:5px; right: 10px; top: 10px;}");
+			sb.AppendLine("			#pages{ display:block; width: 160px; padding-right:20px; height:19px;  line-break: unset; transition-duration:1s; overflow:hidden;  }");
 			sb.AppendLine("			#chk { display:inline; position:absolute; margin-left: -20px; }");
-			sb.AppendLine("			#chk:checked + #pages{ transition-property:height; height: calc(28px + ([MAX]*20px)); transition-duration:1s; overflow:hidden; overflow-y:auto;}");
+			sb.AppendLine("			#chk:checked + #pages{ transition-property:height; height: calc(30px + ([MAX]*23px)); transition-duration:1s; overflow:hidden; overflow-y:auto;}");
 			sb.AppendLine("			#pages a{ font-weight:bold; font-family:Consolas; text-decoration:none; color:black; }");
 			sb.AppendLine("			#pages a:hover{ font-weight:bold; font-family:Consolas; text-decoration:none; color:red; }");
 			sb.AppendLine("			#s::before{ content:\"  Translations: \"; cursor:pointer; }");
 			sb.AppendLine("		</style>");
 			sb.AppendLine("	</head>");
 			sb.AppendLine("	<body>");
-			sb.AppendLine("		<h1>" + strs[0].word + "</h1>");
+			
 
 			
 
 			if (strs.Count == 1)
 			{
+				sb.AppendLine("		<h1>" + strs[0].word + "</h1>");
 				sb.AppendLine("		<div id='translation_0'>");
 
 				sb.AppendLine("			<h2 id='dict_0'>" + strs[0].dictionary + "</h2>");
@@ -268,6 +270,9 @@ namespace multidict
 			}
 			else
 			{
+				wrd = strs[0].word;
+				sb.AppendLine("		<h1>" + strs[0].word + "</h1>");
+
 				sb.AppendLine("		<span id='indexHolder' >");
 				sb.AppendLine("			<input type='checkbox' id='chk' />");
 				sb.AppendLine("			<span id='pages' onclick='document.getElementById(\"chk\").checked = !document.getElementById(\"chk\").checked;'>");
@@ -280,6 +285,12 @@ namespace multidict
 
 				foreach (c_DataObject str in strs)
 				{
+					if (str.word != wrd)
+					{
+						wrd = str.word;
+						sb.AppendLine("		<h1>" + str.word + "</h1>");
+					}
+
 					sb.AppendLine("		<div id='translation_" + str.index + "'>");
 
 					sb.AppendLine("			<h2 title='Translation " + str.index + "' id='dict_" + str.index + "'>" + str.dictionary + "</h2>");
