@@ -30,6 +30,8 @@ namespace multidict
 
 		private void F_Reader_Load(object sender, EventArgs e)
 		{
+			Top = Screen.FromControl(this).WorkingArea.Height - Height;
+			Left = Screen.FromControl(this).WorkingArea.Width - Width;
 			setdata("", "", "");
 			cb_CopyAs.SelectedIndex = Properties.Settings.Default.s_LastCopyMode;
 			cb_AppendData.Checked = Properties.Settings.Default.s_CopyAppend;

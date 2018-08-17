@@ -41,7 +41,7 @@ namespace multidict
 			this.cms_Dicts = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.btn_Dicts_CheckAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.btn_Dicts_UncheckAll = new System.Windows.Forms.ToolStripMenuItem();
-			this.btn_Dicts_Sep1 = new System.Windows.Forms.ToolStripSeparator();
+			this.btn_Dicts_Sep0 = new System.Windows.Forms.ToolStripSeparator();
 			this.btn_Dicts_Groups = new System.Windows.Forms.ToolStripMenuItem();
 			this.btn_Dicts_CheckDefaultGroup = new System.Windows.Forms.ToolStripMenuItem();
 			this.btn_Dicts_Sep2 = new System.Windows.Forms.ToolStripSeparator();
@@ -59,6 +59,9 @@ namespace multidict
 			this.cb_Clear = new System.Windows.Forms.CheckBox();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.cms_SearchHistory = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.btn_Dicts_CreateGroupOfSelection = new System.Windows.Forms.ToolStripMenuItem();
+			this.btn_Dicts_SetSelectionAsDefault = new System.Windows.Forms.ToolStripMenuItem();
+			this.btn_Dicts_Sep1 = new System.Windows.Forms.ToolStripSeparator();
 			this.cms_Dicts.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -76,7 +79,7 @@ namespace multidict
 			this.cb_Search.FormattingEnabled = true;
 			this.cb_Search.Location = new System.Drawing.Point(87, 6);
 			this.cb_Search.Name = "cb_Search";
-			this.cb_Search.Size = new System.Drawing.Size(360, 21);
+			this.cb_Search.Size = new System.Drawing.Size(368, 21);
 			this.cb_Search.TabIndex = 1;
 			this.toolTip1.SetToolTip(this.cb_Search, "Search for word, multiple words should be separated with spaces (e.g.: apple oran" +
         "ge)");
@@ -105,10 +108,12 @@ namespace multidict
 			this.lv_Dictionaries.HideSelection = false;
 			this.lv_Dictionaries.Location = new System.Drawing.Point(86, 33);
 			this.lv_Dictionaries.Name = "lv_Dictionaries";
-			this.lv_Dictionaries.Size = new System.Drawing.Size(361, 133);
+			this.lv_Dictionaries.Size = new System.Drawing.Size(369, 185);
 			this.lv_Dictionaries.TabIndex = 3;
 			this.lv_Dictionaries.UseCompatibleStateImageBehavior = false;
 			this.lv_Dictionaries.View = System.Windows.Forms.View.Details;
+			this.lv_Dictionaries.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.lv_Dictionaries_ItemCheck);
+			this.lv_Dictionaries.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.lv_Dictionaries_ItemChecked);
 			// 
 			// ch_Index
 			// 
@@ -118,16 +123,19 @@ namespace multidict
 			// ch_DictionaryName
 			// 
 			this.ch_DictionaryName.Text = "Dictionary";
-			this.ch_DictionaryName.Width = 311;
+			this.ch_DictionaryName.Width = 300;
 			// 
 			// cms_Dicts
 			// 
 			this.cms_Dicts.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btn_Dicts_CheckAll,
             this.btn_Dicts_UncheckAll,
-            this.btn_Dicts_Sep1,
+            this.btn_Dicts_Sep0,
             this.btn_Dicts_Groups,
+            this.btn_Dicts_CreateGroupOfSelection,
+            this.btn_Dicts_Sep1,
             this.btn_Dicts_CheckDefaultGroup,
+            this.btn_Dicts_SetSelectionAsDefault,
             this.btn_Dicts_Sep2,
             this.btn_Dicts_CheckUtil,
             this.btn_Dicts_CheckFromEnglish,
@@ -135,80 +143,83 @@ namespace multidict
             this.btn_Dicts_Sep3,
             this.btn_Dicts_CheckInvert});
 			this.cms_Dicts.Name = "cms_Dicts";
-			this.cms_Dicts.Size = new System.Drawing.Size(207, 198);
+			this.cms_Dicts.Size = new System.Drawing.Size(233, 270);
+			this.cms_Dicts.Opening += new System.ComponentModel.CancelEventHandler(this.cms_Dicts_Opening);
 			// 
 			// btn_Dicts_CheckAll
 			// 
 			this.btn_Dicts_CheckAll.Name = "btn_Dicts_CheckAll";
-			this.btn_Dicts_CheckAll.Size = new System.Drawing.Size(206, 22);
+			this.btn_Dicts_CheckAll.Size = new System.Drawing.Size(232, 22);
 			this.btn_Dicts_CheckAll.Text = "Check All";
 			this.btn_Dicts_CheckAll.Click += new System.EventHandler(this.btn_Dicts_CheckAll_Click);
 			// 
 			// btn_Dicts_UncheckAll
 			// 
+			this.btn_Dicts_UncheckAll.Enabled = false;
 			this.btn_Dicts_UncheckAll.Name = "btn_Dicts_UncheckAll";
-			this.btn_Dicts_UncheckAll.Size = new System.Drawing.Size(206, 22);
+			this.btn_Dicts_UncheckAll.Size = new System.Drawing.Size(232, 22);
 			this.btn_Dicts_UncheckAll.Text = "Uncheck All";
 			this.btn_Dicts_UncheckAll.Click += new System.EventHandler(this.btn_Dicts_UncheckAll_Click);
 			// 
-			// btn_Dicts_Sep1
+			// btn_Dicts_Sep0
 			// 
-			this.btn_Dicts_Sep1.Name = "btn_Dicts_Sep1";
-			this.btn_Dicts_Sep1.Size = new System.Drawing.Size(203, 6);
+			this.btn_Dicts_Sep0.Name = "btn_Dicts_Sep0";
+			this.btn_Dicts_Sep0.Size = new System.Drawing.Size(229, 6);
 			// 
 			// btn_Dicts_Groups
 			// 
 			this.btn_Dicts_Groups.Name = "btn_Dicts_Groups";
-			this.btn_Dicts_Groups.Size = new System.Drawing.Size(206, 22);
+			this.btn_Dicts_Groups.Size = new System.Drawing.Size(232, 22);
 			this.btn_Dicts_Groups.Text = "Groups";
 			// 
 			// btn_Dicts_CheckDefaultGroup
 			// 
 			this.btn_Dicts_CheckDefaultGroup.Name = "btn_Dicts_CheckDefaultGroup";
-			this.btn_Dicts_CheckDefaultGroup.Size = new System.Drawing.Size(206, 22);
-			this.btn_Dicts_CheckDefaultGroup.Text = "Check Default";
+			this.btn_Dicts_CheckDefaultGroup.Size = new System.Drawing.Size(232, 22);
+			this.btn_Dicts_CheckDefaultGroup.Text = "Check Default Group";
+			this.btn_Dicts_CheckDefaultGroup.Click += new System.EventHandler(this.btn_Dicts_CheckDefaultGroup_Click);
 			// 
 			// btn_Dicts_Sep2
 			// 
 			this.btn_Dicts_Sep2.Name = "btn_Dicts_Sep2";
-			this.btn_Dicts_Sep2.Size = new System.Drawing.Size(203, 6);
+			this.btn_Dicts_Sep2.Size = new System.Drawing.Size(229, 6);
 			// 
 			// btn_Dicts_CheckUtil
 			// 
 			this.btn_Dicts_CheckUtil.Name = "btn_Dicts_CheckUtil";
-			this.btn_Dicts_CheckUtil.Size = new System.Drawing.Size(206, 22);
+			this.btn_Dicts_CheckUtil.Size = new System.Drawing.Size(232, 22);
 			this.btn_Dicts_CheckUtil.Text = "Check Utility Dictionaries";
 			this.btn_Dicts_CheckUtil.Click += new System.EventHandler(this.btn_Dicts_CheckUtil_Click);
 			// 
 			// btn_Dicts_CheckFromEnglish
 			// 
 			this.btn_Dicts_CheckFromEnglish.Name = "btn_Dicts_CheckFromEnglish";
-			this.btn_Dicts_CheckFromEnglish.Size = new System.Drawing.Size(206, 22);
+			this.btn_Dicts_CheckFromEnglish.Size = new System.Drawing.Size(232, 22);
 			this.btn_Dicts_CheckFromEnglish.Text = "Check all \'From English\'";
 			this.btn_Dicts_CheckFromEnglish.Click += new System.EventHandler(this.btn_Dicts_CheckFromEnglish_Click);
 			// 
 			// btn_Dicts_CheckToEnglish
 			// 
 			this.btn_Dicts_CheckToEnglish.Name = "btn_Dicts_CheckToEnglish";
-			this.btn_Dicts_CheckToEnglish.Size = new System.Drawing.Size(206, 22);
+			this.btn_Dicts_CheckToEnglish.Size = new System.Drawing.Size(232, 22);
 			this.btn_Dicts_CheckToEnglish.Text = "Check all \'To English\'";
 			this.btn_Dicts_CheckToEnglish.Click += new System.EventHandler(this.btn_Dicts_CheckToEnglish_Click);
 			// 
 			// btn_Dicts_Sep3
 			// 
 			this.btn_Dicts_Sep3.Name = "btn_Dicts_Sep3";
-			this.btn_Dicts_Sep3.Size = new System.Drawing.Size(203, 6);
+			this.btn_Dicts_Sep3.Size = new System.Drawing.Size(229, 6);
 			// 
 			// btn_Dicts_CheckInvert
 			// 
 			this.btn_Dicts_CheckInvert.Name = "btn_Dicts_CheckInvert";
-			this.btn_Dicts_CheckInvert.Size = new System.Drawing.Size(206, 22);
+			this.btn_Dicts_CheckInvert.Size = new System.Drawing.Size(232, 22);
 			this.btn_Dicts_CheckInvert.Text = "Invert Selection";
 			this.btn_Dicts_CheckInvert.Click += new System.EventHandler(this.btn_Dicts_CheckInvert_Click);
 			// 
 			// btn_Search
 			// 
-			this.btn_Search.Location = new System.Drawing.Point(15, 143);
+			this.btn_Search.Location = new System.Drawing.Point(15, 195);
 			this.btn_Search.Name = "btn_Search";
 			this.btn_Search.Size = new System.Drawing.Size(65, 23);
 			this.btn_Search.TabIndex = 4;
@@ -228,9 +239,9 @@ namespace multidict
 			this.lv_Results.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
 			this.lv_Results.FullRowSelect = true;
 			this.lv_Results.GridLines = true;
-			this.lv_Results.Location = new System.Drawing.Point(15, 172);
+			this.lv_Results.Location = new System.Drawing.Point(15, 224);
 			this.lv_Results.Name = "lv_Results";
-			this.lv_Results.Size = new System.Drawing.Size(773, 249);
+			this.lv_Results.Size = new System.Drawing.Size(773, 280);
 			this.lv_Results.TabIndex = 5;
 			this.lv_Results.UseCompatibleStateImageBehavior = false;
 			this.lv_Results.View = System.Windows.Forms.View.Details;
@@ -254,12 +265,13 @@ namespace multidict
 			// btn_Exit
 			// 
 			this.btn_Exit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btn_Exit.Location = new System.Drawing.Point(667, 425);
+			this.btn_Exit.Location = new System.Drawing.Point(667, 508);
 			this.btn_Exit.Name = "btn_Exit";
 			this.btn_Exit.Size = new System.Drawing.Size(121, 23);
 			this.btn_Exit.TabIndex = 6;
 			this.btn_Exit.Text = "Exit";
 			this.btn_Exit.UseVisualStyleBackColor = true;
+			this.btn_Exit.Click += new System.EventHandler(this.btn_Exit_Click);
 			// 
 			// cb_Clear
 			// 
@@ -267,7 +279,7 @@ namespace multidict
 			this.cb_Clear.AutoSize = true;
 			this.cb_Clear.Checked = true;
 			this.cb_Clear.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cb_Clear.Location = new System.Drawing.Point(15, 425);
+			this.cb_Clear.Location = new System.Drawing.Point(15, 508);
 			this.cb_Clear.Name = "cb_Clear";
 			this.cb_Clear.Size = new System.Drawing.Size(174, 17);
 			this.cb_Clear.TabIndex = 7;
@@ -279,11 +291,32 @@ namespace multidict
 			this.cms_SearchHistory.Name = "cms_Dicts";
 			this.cms_SearchHistory.Size = new System.Drawing.Size(61, 4);
 			// 
+			// btn_Dicts_CreateGroupOfSelection
+			// 
+			this.btn_Dicts_CreateGroupOfSelection.Enabled = false;
+			this.btn_Dicts_CreateGroupOfSelection.Name = "btn_Dicts_CreateGroupOfSelection";
+			this.btn_Dicts_CreateGroupOfSelection.Size = new System.Drawing.Size(232, 22);
+			this.btn_Dicts_CreateGroupOfSelection.Text = "Create Group of Selection";
+			this.btn_Dicts_CreateGroupOfSelection.Click += new System.EventHandler(this.btn_Dicts_CreateGroupOfSelection_Click);
+			// 
+			// btn_Dicts_SetSelectionAsDefault
+			// 
+			this.btn_Dicts_SetSelectionAsDefault.Enabled = false;
+			this.btn_Dicts_SetSelectionAsDefault.Name = "btn_Dicts_SetSelectionAsDefault";
+			this.btn_Dicts_SetSelectionAsDefault.Size = new System.Drawing.Size(232, 22);
+			this.btn_Dicts_SetSelectionAsDefault.Text = "Set Selection as Default Group";
+			this.btn_Dicts_SetSelectionAsDefault.Click += new System.EventHandler(this.btn_Dicts_SetSelectionAsDefault_Click);
+			// 
+			// btn_Dicts_Sep1
+			// 
+			this.btn_Dicts_Sep1.Name = "btn_Dicts_Sep1";
+			this.btn_Dicts_Sep1.Size = new System.Drawing.Size(229, 6);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(800, 450);
+			this.ClientSize = new System.Drawing.Size(800, 533);
 			this.Controls.Add(this.cb_Clear);
 			this.Controls.Add(this.lv_Dictionaries);
 			this.Controls.Add(this.btn_Exit);
@@ -318,7 +351,7 @@ namespace multidict
 		private ContextMenuStrip cms_Dicts;
 		private ToolStripMenuItem btn_Dicts_CheckAll;
 		private ToolStripMenuItem btn_Dicts_UncheckAll;
-		private ToolStripSeparator btn_Dicts_Sep1;
+		private ToolStripSeparator btn_Dicts_Sep0;
 		private ToolStripMenuItem btn_Dicts_Groups;
 		private ToolStripMenuItem btn_Dicts_CheckDefaultGroup;
 		private ToolStripSeparator btn_Dicts_Sep2;
@@ -329,6 +362,9 @@ namespace multidict
 		private ToolStripMenuItem btn_Dicts_CheckUtil;
 		private ToolTip toolTip1;
 		private ContextMenuStrip cms_SearchHistory;
+		private ToolStripMenuItem btn_Dicts_CreateGroupOfSelection;
+		private ToolStripSeparator btn_Dicts_Sep1;
+		private ToolStripMenuItem btn_Dicts_SetSelectionAsDefault;
 	}
 }
 

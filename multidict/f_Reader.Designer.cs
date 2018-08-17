@@ -179,6 +179,7 @@
 			this.Controls.Add(this.lbl_Word);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
 			this.Name = "f_Reader";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

@@ -213,6 +213,137 @@ namespace multidict
 				e.SuppressKeyPress = true;
 			}
 		}
+
+		private void btn_Exit_Click(object sender, EventArgs e)
+		{
+			Application.Exit();
+		}
+
+		private void btn_Dicts_SetSelectionAsDefault_Click(object sender, EventArgs e)
+		{
+			if (lv_Dictionaries.CheckedItems.Count > 0 && MessageBox.Show("You are about to change your default group.\r\n\r\nAre you sure you wish to continue?","Are you sure?",MessageBoxButtons.YesNo,MessageBoxIcon.Question) == DialogResult.Yes)
+			{
+				string tmp = "";
+				foreach (ListViewItem lvi in lv_Dictionaries.CheckedItems)
+				{
+					tmp += lvi.Tag.ToString().ToLower() + ";";
+				}
+				tmp = tmp.Trim(';');
+				Properties.Settings.Default.s_DefaultGroup = tmp;
+				Properties.Settings.Default.Save();
+			}
+		}
+
+		private void btn_Dicts_CheckDefaultGroup_Click(object sender, EventArgs e)
+		{
+			string[] ss = Properties.Settings.Default.s_DefaultGroup.Split(';');
+			foreach (ListViewItem lvi in lv_Dictionaries.Items)
+			{
+				if (ss.Contains(lvi.Tag.ToString().ToLower())) { lvi.Checked = true; }
+				else { lvi.Checked = false; }
+			}
+		}
+
+		private void btn_Dicts_CreateGroupOfSelection_Click(object sender, EventArgs e)
+		{
+			List<ListViewItem> tmp = new List<ListViewItem>();
+			ListViewItem[] lvis = new ListViewItem[lv_Dictionaries.CheckedItems.Count];
+			int i = 0;
+			foreach (ListViewItem lvi in lv_Dictionaries.CheckedItems)
+			{
+				lvis[i] = new ListViewItem(new string[]{ lvi.SubItems[0].Text, lvi.SubItems[1].Text, lvi.SubItems[2].Text }) { Checked = true, Tag = lvi.Tag };
+				i++;
+			}
+			
+			f_GroupCreation fg = new f_GroupCreation();
+			fg.Items = lvis.ToList();
+			fg.ShowDialog();
+		}
+
+		private void cms_Dicts_Opening(object sender, CancelEventArgs e)
+		{
+			ToolStripItemCollection ti = null;
+			ti = btn_Dicts_Groups.DropDown.Items;
+			if (ti.Find("tss", true).Count() >0) { ti.Remove(ti.Find("tss", true)[0]); }
+			if (ti.Find("Manage_Groups", true).Count() >0) { ti.Remove(ti.Find("Manage_Groups", true)[0]); }
+
+			foreach (string s in Properties.Settings.Default.s_Groups)
+			{
+				ToolStripItem t = new ToolStripMenuItem();
+				t.Text = s.Substring(0, s.IndexOf(";"));
+				t.Name = t.Text;
+
+				if (ti == null || ti.Find(t.Text,true).Count() == 0)
+				{
+					btn_Dicts_Groups.DropDown.Items.Add(t);
+					t.Click += T_Click;
+				}
+			}
+
+			if (ti != null && ti.Count > 0)
+			{
+				ToolStripSeparator tss = new ToolStripSeparator();
+				tss.Name = "tss";
+				ToolStripItem tbtn = new ToolStripMenuItem();
+				tbtn.Text = "Manage Groups";
+				tbtn.Name = "Manage_Groups";
+				btn_Dicts_Groups.DropDown.Items.AddRange(new ToolStripItem[] { tss, tbtn });
+				tbtn.Click += Tbtn_Click;
+			}
+		}
+
+		private void Tbtn_Click(object sender, EventArgs e)
+		{
+			//TODO:: MANAGE GROUPS
+		}
+
+		private void T_Click(object sender, EventArgs e)
+		{
+			if(sender as ToolStripMenuItem != null)
+			{
+				string name = (sender as ToolStripMenuItem).Text;
+
+				foreach(string s in Properties.Settings.Default.s_Groups)
+				{
+					if (s.ToLower().StartsWith(name.ToLower()))
+					{
+						string[] ss = s.ToLower().Split(';');
+						foreach (ListViewItem lvi in lv_Dictionaries.Items)
+						{
+							if (lvi.Tag.ToString().ToLower() != ss.First())
+							{
+								if (ss.Contains(lvi.Tag.ToString().ToLower())) { lvi.Checked = true; }
+								else { lvi.Checked = false; }
+							}
+						}
+
+					}
+				}
+			}
+		}
+
+		private void lv_Dictionaries_ItemCheck(object sender, ItemCheckEventArgs e)
+		{
+			
+		}
+
+		private void lv_Dictionaries_ItemChecked(object sender, ItemCheckedEventArgs e)
+		{
+			if (lv_Dictionaries.CheckedItems.Count == 0)
+			{
+				btn_Dicts_CreateGroupOfSelection.Enabled = false;
+				btn_Dicts_SetSelectionAsDefault.Enabled = false;
+				btn_Dicts_UncheckAll.Enabled = false;
+				btn_Dicts_CheckAll.Enabled = true;
+			}
+			else
+			{
+				btn_Dicts_CreateGroupOfSelection.Enabled = true;
+				btn_Dicts_SetSelectionAsDefault.Enabled = true;
+				btn_Dicts_UncheckAll.Enabled = true;
+				btn_Dicts_CheckAll.Enabled = false;
+			}
+		}
 	}
 
 	public static class string_extension

@@ -243,10 +243,10 @@ namespace multidict
 			sb.AppendLine("			h2{ font-weight:100; font-size: 0.9em; font-family:consolas; color: red; text-shadow:1px 1px 1px #F00;  }");
 			sb.AppendLine("			p{ display:block; width:99%; position:relative; white-space:pre-wrap; font-size:1.2em; font-family:\"Courier New\"; text-shadow:1px 1px 1px #111;  }");
 			sb.AppendLine("			div{ margin-top:20px; padding: 5px 0px 20px 10px; border-bottom: 1px solid white;  border-left: 10px solid rgba(255,255,255,0.3); border-top-left-radius:10px; border-bottom-left-radius:15px; }");
-			sb.AppendLine("			#indexHolder { background:#FFF; display:inline; position:absolute; padding-left: 25px; margin-left:-5px; margin-top:-30px; z-index:1; border-top-left-radius:5px; right: 10px; top: 10px;}");
+			sb.AppendLine("			#indexHolder { background:#FFF; display:inline; position:fixed; padding-left: 25px; margin-left:-5px; margin-top:10px; z-index:1; border-top-left-radius:5px; right: 10px; top: 10px;}");
 			sb.AppendLine("			#pages{ display:block; width: 160px; padding-right:20px; height:19px;  line-break: unset; transition-duration:1s; overflow:hidden;  }");
 			sb.AppendLine("			#chk { display:inline; position:absolute; margin-left: -20px; }");
-			sb.AppendLine("			#chk:checked + #pages{ transition-property:height; height: calc(30px + ([MAX]*23px)); transition-duration:1s; overflow:hidden; overflow-y:auto;}");
+			sb.AppendLine("			#chk:checked + #pages{ transition-property:height; height: calc(30px + ([MAX]*28px)); transition-duration:1s; overflow:hidden; overflow-y:auto;}");
 			sb.AppendLine("			#pages a{ font-weight:bold; font-family:Consolas; text-decoration:none; color:black; }");
 			sb.AppendLine("			#pages a:hover{ font-weight:bold; font-family:Consolas; text-decoration:none; color:red; }");
 			sb.AppendLine("			#s::before{ content:\"  Translations: \"; cursor:pointer; }");
